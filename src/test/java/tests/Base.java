@@ -31,6 +31,9 @@ public class Base implements Config{
                 capabilities.setCapability("version", browserVersion);
                 capabilities.setCapability("platform", platform);
                 capabilities.setCapability("name", testName);           //sets test name in saucelabs to the test name
+                capabilities.setCapability("recordVideo", recordVideo);
+                capabilities.setCapability("recordScreenshots", recordScreenshots);
+                //can add tags and build as capabilitiies also I believe - see sauce labs api documentation
                 String sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", sauceUser, sauceKey);
                 driver = new RemoteWebDriver(new URL(sauceUrl),capabilities);
                 sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
@@ -43,6 +46,27 @@ public class Base implements Config{
                     System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/vendor/chromedriver.exe");
                     driver = new ChromeDriver();
                 }
+            }
+
+            else if (host.equals("saucelabs-mobile")) {
+                DesiredCapabilities capabilities = new DesiredCapabilities();
+                capabilities.setCapability("browserName", browser);
+                capabilities.setCapability("deviceName", device);
+                capabilities.setCapability("platform", platform);
+                capabilities.setCapability("platformVersion", platformVersion);
+                capabilities.setCapability("appiumVersion", appiumVersion);
+                capabilities.setCapability("device-orientation", deviceOrientation);
+                             // capabilities.setCapability("browserVersion",browserVersion);
+                capabilities.setCapability("name", testName);           //sets test name in saucelabs to the test name
+                capabilities.setCapability("recordVideo", recordVideo);
+                capabilities.setCapability("recordScreenshots", recordScreenshots);
+                             //can add tags and build as capabilitiies
+               // capabilities.setCapability("tags",tags);
+                capabilities.setCapability("build", build);
+                String sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", sauceUser, sauceKey);
+                driver = new RemoteWebDriver(new URL(sauceUrl),capabilities);
+                sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
+                sauceClient = new SauceREST(sauceUser, sauceKey);
             }
         }
 
@@ -61,7 +85,7 @@ public class Base implements Config{
 
             @Override
             protected void failed(Throwable throwable, Description description) {
-                if (host.equals("saucelabs")) {
+                if (host.contains("saucelabs")) {
                     sauceClient.jobFailed(sessionId);
                     System.out.println(String.format("https://saucelabs.com/tests/%s", sessionId));
                 }
@@ -69,7 +93,7 @@ public class Base implements Config{
 
             @Override
             protected void succeeded(Description description) {
-                if (host.equals("saucelabs")) {
+                if (host.contains("saucelabs")) {
                     sauceClient.jobPassed(sessionId);
                 }
             }
