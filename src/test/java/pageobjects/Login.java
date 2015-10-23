@@ -29,11 +29,11 @@ public class Login extends Base {
 
     }
 
-    public Boolean successMessagePresent() {
+    public Boolean success() {
         return isDisplayed(successMessageLocator);
     }
 
-    public Boolean failureMessagePresent() {
+    public Boolean failure() {
         return isDisplayed(failureMessageLocator);
     }
 }

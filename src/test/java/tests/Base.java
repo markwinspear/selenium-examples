@@ -1,5 +1,7 @@
 package tests;
 
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TestRule;
@@ -15,6 +17,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.edge.EdgeDriver;         // For running tests on MS Edge. Executable added to vendor folder
+
 import com.saucelabs.saucerest.SauceREST;
 import java.net.URL;
 
@@ -24,6 +27,7 @@ import java.net.URL;
 public class Base implements Config{
 
     protected WebDriver driver;
+    protected AndroidDriver<AndroidElement> mobileDriver;
     private String testName;
     private String sessionId;
     private SauceREST sauceClient;
@@ -57,7 +61,6 @@ public class Base implements Config{
                         case "firefox":
                             driver = new FirefoxDriver();
                             //driver = new MarionetteDriver();
-
                             break;
                         case "chrome":
                             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/vendor/chromedriver.exe");
@@ -74,10 +77,16 @@ public class Base implements Config{
                             System.setProperty("webdriver.ie.driver", System.getProperty("user.dir") + "/vendor/IEDriverServer.exe");
                             driver = new InternetExplorerDriver(capabilities);
                             driver.findElement(By.tagName("html")).sendKeys(Keys.chord(Keys.CONTROL, "0")); //set zoom level to 100% or IE Driver throws an error
-
                             break;
+
                     }
                     break;
+
+                case "local-android":
+                //     mobileDriver = new AndroidDriver<AndroidElement>();
+                    
+                    break;
+
 
                 case "saucelabs-mobile":
                     capabilities = new DesiredCapabilities();
@@ -101,53 +110,6 @@ public class Base implements Config{
                     break;
                 }
             }
-            /**
-            if (host.equals("saucelabs")) {
-                DesiredCapabilities capabilities = new DesiredCapabilities();
-                capabilities.setCapability("browserName", browser);
-                capabilities.setCapability("version", browserVersion);
-                capabilities.setCapability("platform", platform);
-                capabilities.setCapability("name", testName);           //sets test name in saucelabs to the test name
-                capabilities.setCapability("recordVideo", recordVideo);
-                capabilities.setCapability("recordScreenshots", recordScreenshots);
-                //can add tags and build as capabilitiies also I believe - see sauce labs api documentation
-                String sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", sauceUser, sauceKey);
-                driver = new RemoteWebDriver(new URL(sauceUrl),capabilities);
-                sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
-                sauceClient = new SauceREST(sauceUser, sauceKey);
-            }
-            else if (host.equals("localhost")) {
-                if (browser.equals("firefox")) {
-                    driver = new FirefoxDriver();
-                    //driver = new MarionetteDriver();
-
-                } else if (browser.equals("chrome")) {
-                    System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/vendor/chromedriver.exe");
-                    driver = new ChromeDriver();
-                }
-            }
-
-            else if (host.equals("saucelabs-mobile")) {
-                DesiredCapabilities capabilities = new DesiredCapabilities();
-                capabilities.setCapability("browserName", browser);
-                capabilities.setCapability("deviceName", device);
-                capabilities.setCapability("platform", platform);
-                capabilities.setCapability("platformVersion", platformVersion);
-                capabilities.setCapability("appiumVersion", appiumVersion);
-                capabilities.setCapability("device-orientation", deviceOrientation);
-                             // capabilities.setCapability("browserVersion",browserVersion);
-                capabilities.setCapability("name", testName);           //sets test name in saucelabs to the test name
-                capabilities.setCapability("recordVideo", recordVideo);
-                capabilities.setCapability("recordScreenshots", recordScreenshots);
-                             //can add tags and build as capabilitiies
-               // capabilities.setCapability("tags",tags);
-                capabilities.setCapability("build", build);
-                String sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", sauceUser, sauceKey);
-                driver = new RemoteWebDriver(new URL(sauceUrl),capabilities);
-                sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
-                sauceClient = new SauceREST(sauceUser, sauceKey);
-            }
-        } **/
 
         @Override
         protected void after() {

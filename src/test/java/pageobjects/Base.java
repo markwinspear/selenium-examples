@@ -59,6 +59,8 @@ public class Base implements Config{
      * @return WebElement
      */
     public WebElement find(By locator) {
+        WebDriverWait wait = new WebDriverWait(driver, 15);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(driver.findElement(locator)));
         return driver.findElement(locator);
     }
 
