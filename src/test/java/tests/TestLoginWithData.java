@@ -51,10 +51,10 @@ public class TestLoginWithData extends Base {
 
             switch (expectedResult) {
                 case "Success":
-                    assertTrue("success message not present", login.successMessagePresent());
+                    assertTrue("success message not present", login.success());
                     break;
                 case "Failure":
-                    assertTrue("failure message wasn't present after providing an incorrect password", login.failureMessagePresent());
+                    assertTrue("failure message wasn't present after providing an incorrect password", login.failure());
                     break;
                 default:
                     throw new IllegalArgumentException("Expected either Success or Failure but found " + expectedResult);
