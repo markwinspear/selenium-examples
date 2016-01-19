@@ -47,8 +47,8 @@ public class Base implements Config{
                     capabilities.setCapability("version", browserVersion);
                     capabilities.setCapability("platform", platform);
                     capabilities.setCapability("name", testName);           //sets test name in saucelabs to the test name
-                    capabilities.setCapability("recordVideo", recordVideo);
-                    capabilities.setCapability("recordScreenshots", recordScreenshots);
+
+
                     //can add tags and build as capabilitiies also I believe - see sauce labs api documentation
                     sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", sauceUser, sauceKey);
                     driver = new RemoteWebDriver(new URL(sauceUrl), capabilities);
@@ -103,6 +103,7 @@ public class Base implements Config{
                     //can add tags and build as capabilitiies
                     // capabilities.setCapability("tags",tags);
                     capabilities.setCapability("build", build);
+
                     sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", sauceUser, sauceKey);
                     driver = new RemoteWebDriver(new URL(sauceUrl), capabilities);
                     sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
